@@ -2,7 +2,7 @@
 
 Documented walkthroughs and notes from my TryHackMe journey.
 
-**Profile:** [tryhackme.com/p/Lukas](https://tryhackme.com/p/Lukas)
+**Profile:** [tryhackme.com/p/Lukas.](https://tryhackme.com/p/Lukas.)
 
 ## Structure
 
