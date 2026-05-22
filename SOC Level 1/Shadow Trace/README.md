@@ -1,4 +1,4 @@
-````markdown
+
 # Shadow Trace
 
 ## Room Overview
@@ -62,6 +62,6 @@ Binary fetched and saved locally as `test.txt` — dropper disguising a maliciou
 - CyberChef charcode decoding requires "From Decimal" with comma delimiter, not "From Charcode"
 - `WS2_32.dll` in imports signals network communication capability
 - Executables disguised with benign filenames (`update.exe` → `test.txt`) are a common defense evasion technique
-````
+
 
 
