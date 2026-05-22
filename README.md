@@ -4,22 +4,17 @@ Documented walkthroughs and notes from my TryHackMe journey.
 
 **Profile:** [tryhackme.com/p/Lukas.](https://tryhackme.com/p/Lukas.)
 
-## Structure
+## Writeup Structure
 
 Each writeup follows this format:
 
--Room Overview
+- **Room Overview** — Scenario context and investigation objective
+- **Category** — Room classification (e.g. Phishing, DFIR, Network Analysis)
+- **Objective** — Key investigation goals
+- **Tools & Environment** — Tools used and environment context
+- **Investigation Process** — Methodology, decision points, commands used
+- **Findings** — IOCs, attack chain, key artifacts
+- **Analysis & Response** — MITRE ATT&CK mapping, containment and remediation actions
+- **Key Takeaways** — Skills consolidated, techniques worth noting
 
--Objective
-
--Tools & Environment
-
--Investigation Process
-
--Findings
-
--Analysis & Response
-
--Key Takeaways
-
-Writeups focus on analysis and methodology, not spoilers.
+Writeups focus on methodology and analysis. No spoilers.
