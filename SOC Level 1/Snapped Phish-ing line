@@ -1,51 +1,48 @@
-# Snapped Phish-ing Line
+Snapped Phish-ing Line
 Room Overview
-As a member of the IT department at SwiftSpend Financial, multiple employees across departments report receiving a suspicious email. Several have already submitted credentials and lost account access. The incident is escalated for full investigation — identify the attacker's infrastructure, recover the phishing kit, and determine the scope of compromise.
+Multiple SwiftSpend Financial employees report a suspicious email. Several have already submitted credentials and lost account access. Objective: identify attacker infrastructure, recover the phishing kit, and determine scope of compromise.
 Category: Phishing Investigation / CTI
 Objective
 
-Identify key artifacts from provided email samples
-Investigate phishing URLs and redirection chain
+Extract key artifacts from provided email samples
+Map the phishing redirection chain
 Retrieve and analyze the phishing kit
 Gather adversary intelligence via CTI tools
-Uncover additional indicators within the phishing kit
 
 Tools & Environment
 
-TryHackMe AttackBox (isolated VM — safe to interact with live URLs and attachments)
-VirusTotal — file hash reputation and threat categorization
-CyberChef — decoding encoded strings
+TryHackMe AttackBox
+VirusTotal
+CyberChef
 CLI — sha256sum, unzip, find
 
 Investigation Process
-Starting with the phish-emails folder — 5 emails to review. Opening Quote for Services Rendered first, examining headers to extract recipient name and adversary sender address. Headers are the first stop before touching any attachments or links.
-Moving to the email addressed to Zoe Duncan — contains an attachment. Since we're operating in an isolated VM, it's safe to open and observe where it leads. The attachment redirects to a Microsoft login impersonation page on the domain kennaroads[.]buzz.
-With the phishing domain identified, checking for exposed files on the attacker's server — navigating to /data/ reveals an open directory containing update365.zip. This is a common OPSEC failure on the attacker's side and worth checking early in any phishing investigation. The archive is downloaded and hashed:
+Reviewed 5 emails in phish-emails folder. Extracted recipient name and adversary sender address from headers in Quote for Services Rendered. Zoe Duncan's email contained an attachment redirecting to a Microsoft login impersonation page on kennaroads[.]buzz.
+Navigated to /data/ on the attacker's server — open directory exposing update365.zip. Downloaded and hashed:
 sha256sum update365.zip
 ba3c15267393419eb08c7b2652b8b6b39b406ef300ae8a18fee4d16b19ac9686
-Hash is run through VirusTotal — confirms phishing classification and reveals an additional threat category assigned to the archive, along with a file count from the Details tab.
-Navigating to /data/Update365/ — a log.txt file is present containing submitted credentials. The log is short enough to manually identify a user who submitted credentials more than once without tooling.
-Extracting the archive and locating submit.php to identify the exfiltration email address:
+VirusTotal confirmed phishing classification plus an additional threat category, with file count visible on the Details tab.
+/data/Update365/log.txt contained submitted credentials — manually identified a repeat submission without tooling.
+Located submit.php for exfiltration email:
 find -type f -name submit.php 2>/dev/null
-Final step — locating the flag. Directory traversal: /data/flag.txt → not there. /data/Update365/ → not there. Found at /data/Update365/office365/flag.txt. Value is Base64 encoded, decoded in reverse via CyberChef to retrieve the flag.
+Flag found at /data/Update365/office365/flag.txt — Base64 encoded, decoded in reverse via CyberChef.
 Findings
 
-Attack chain: Phishing email → malicious attachment → redirect → Microsoft credential harvesting page → exfiltration via submit.php
+Attack chain: Phishing email → malicious attachment → redirect → credential harvesting page → exfiltration via submit.php
 Phishing domain: kennaroads[.]buzz
 Phishing kit hash: ba3c15267393419eb08c7b2652b8b6b39b406ef300ae8a18fee4d16b19ac9686
-Exposed credential log: /data/Update365/log.txt
-Exfiltration method: Credentials collected via submit.php and forwarded to adversary-controlled email
+Credential log: /data/Update365/log.txt
 
 Analysis & Response
 
-MITRE ATT&CK: T1566 (Phishing), T1078 (Valid Accounts — harvested credentials)
-Immediate actions: Reset credentials for all affected accounts, prioritizing users identified in log.txt. Block kennaroads[.]buzz at the perimeter.
-Communication: Notify all recipients of the phishing campaign regardless of whether they submitted credentials
-Longer term: Phishing awareness training; enforce MFA to limit impact of credential harvesting
+MITRE ATT&CK: T1566 (Phishing), T1078 (Valid Accounts)
+Reset credentials for all affected accounts, prioritize repeat submission identified in log.txt
+Block kennaroads[.]buzz at perimeter
+Notify all recipients regardless of submission status
+Enforce MFA, conduct phishing awareness training
 
 Key Takeaways
 
-Phishing kits frequently expose themselves via open /data/ directories — directory enumeration is a high-value early step in phishing investigations
-Email headers are the primary artifact for sender attribution before any attachment interaction
-Environment matters: safe interaction with live URLs and attachments is only viable in a properly isolated VM
-CyberChef handles most encoding/decoding quickly during triage — keep it in the toolkit
+Open /data/ directories are a common attacker OPSEC failure — directory enumeration is an early high-value step
+Environment isolation determines what interaction with live URLs is safe
+CyberChef handles encoding/decoding quickly during triage
