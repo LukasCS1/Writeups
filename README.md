@@ -7,9 +7,12 @@ Documented walkthroughs and notes from my TryHackMe journey.
 ## Structure
 
 Each writeup follows this format:
-- Room overview and category
-- Tools used
-- Process & findings
-- Key takeaways
+-Room Overview
+-Objective
+-Tools & Environment
+-Investigation Process
+-Findings
+-Analysis & Response
+-Key Takeaways
 
 Writeups focus on analysis and methodology, not spoilers.
