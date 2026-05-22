@@ -1,4 +1,4 @@
-````markdown
+
 # Snapped Phish-ing Line
 
 ## Room Overview
@@ -54,4 +54,4 @@ Flag found at `/data/Update365/office365/flag.txt` — Base64 encoded, decoded i
 - Open `/data/` directories are a common attacker OPSEC failure — directory enumeration is an early high-value step
 - Environment isolation determines what interaction with live URLs is safe
 - CyberChef handles encoding/decoding quickly during triage
-````
+
