@@ -17,4 +17,4 @@ Each writeup follows this format:
 - **Analysis & Response** — MITRE ATT&CK mapping, containment and remediation actions
 - **Key Takeaways** — Skills consolidated, techniques worth noting
 
-Writeups focus on methodology and analysis. No spoilers.
+Writeups focus on methodology and analysis. Not on spoilers.
