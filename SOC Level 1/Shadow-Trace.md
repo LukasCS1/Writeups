@@ -52,7 +52,7 @@ Charcode array decoded via CyberChef (From Decimal, comma delimiter) → `hxxps[
 - Investigate `CORPsvc_backup` account — service account executing PowerShell and browser JS is a red flag for compromise or abuse
 - Escalate and report findings
 
-## MITRE ATT&CK
+## MITRE ATT&CK v19 
 - Masquerading (T1036) — `windows-update.exe` disguised as legitimate Windows binary
 - Obfuscated Files or Information (T1027) — encoded URLs and payloads
 - Deobfuscate/Decode (T1140) — Base64 and charcode used to conceal malicious URLs
