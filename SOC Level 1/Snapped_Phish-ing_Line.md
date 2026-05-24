@@ -48,7 +48,7 @@ Flag found at `/data/Update365/office365/flag.txt` — Base64 encoded, decoded i
 - Notify all recipients regardless of submission status
 - Enforce MFA, conduct phishing awareness training
 
-## MITRE ATT&CK
+## MITRE ATT&CK v19 
 - Phishing (T1566) — initial access via malicious email attachment
 - Valid Accounts (T1078) — harvested credentials used for account access
 - Obfuscated Files or Information (T1027) — Base64 encoded flag within phishing kit
