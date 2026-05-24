@@ -1,10 +1,10 @@
 # Snapped Phish-ing Line
 
 ## Room Overview
-Multiple SwiftSpend Financial employees report a suspicious email. Several have already submitted credentials and lost account access.
-Objective: identify attacker infrastructure, recover the phishing kit, and determine scope of compromise.
+Multiple SwiftSpend Financial employees report a suspicious email. Several have already submitted credentials and lost account access. Objective: identify attacker infrastructure, recover the phishing kit, and determine scope of compromise.
 
-**Category:** Phishing Investigation / CTI
+## Category
+- Phishing Investigation / CTI
 
 ## Objective
 - Extract key artifacts from provided email samples
@@ -19,8 +19,8 @@ Objective: identify attacker infrastructure, recover the phishing kit, and deter
 - CLI — `sha256sum`, `unzip`, `find`
 
 ## Investigation Process
-Reviewed 5 emails in phish-emails folder. Extracted recipient name and adversary sender address from headers in *Quote for Services Rendered*.
-Zoe Duncan's email contained an attachment redirecting to a Microsoft login impersonation page on `kennaroads[.]buzz`.
+Reviewed 5 emails in phish-emails folder. Extracted recipient name and adversary sender address from headers in *Quote for Services Rendered*. Zoe Duncan's email contained an attachment redirecting to a Microsoft login impersonation page on `kennaroads[.]buzz`.
+
 Navigated to `/data/` on the attacker's server — open directory exposing `update365.zip`. Downloaded and hashed:
 ```bash
 sha256sum update365.zip
@@ -43,11 +43,16 @@ Flag found at `/data/Update365/office365/flag.txt` — Base64 encoded, decoded i
 - **Credential log:** `/data/Update365/log.txt`
 
 ## Analysis & Response
-- **MITRE ATT&CK:** T1566 (Phishing), T1078 (Valid Accounts)
 - Reset credentials for all affected accounts, prioritize repeat submission identified in log.txt
 - Block `kennaroads[.]buzz` at perimeter
 - Notify all recipients regardless of submission status
 - Enforce MFA, conduct phishing awareness training
+
+## MITRE ATT&CK
+- Phishing (T1566) — initial access via malicious email attachment
+- Valid Accounts (T1078) — harvested credentials used for account access
+- Obfuscated Files or Information (T1027) — Base64 encoded flag within phishing kit
+- Exfiltration Over Web Service (T1567) — credentials exfiltrated via submit.php to adversary email
 
 ## Key Takeaways
 - Open `/data/` directories are a common attacker OPSEC failure — directory enumeration is an early high-value step
