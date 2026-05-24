@@ -38,7 +38,7 @@ Identified the full C2 URL from connection logs: `pastebin[.]com/yTg0Ah6a`. Navi
 - Investigate Browne's endpoint for additional compromise indicators
 - Isolate endpoint and escalate
 
-## MITRE ATT&CK
+## MITRE ATT&CK v19 
 - Masquerading (T1036) — bitsadmin abused as legitimate Windows binary to blend in
 - Web Service (T1102) — Pastebin used as C2 infrastructure
 - Ingress Tool Transfer (T1105) — bitsadmin downloading payload from C2
