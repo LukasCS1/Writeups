@@ -1,10 +1,10 @@
-
 # Invite Only
 
 ## Room Overview
 As an SOC analyst at TrySecureMe, supporting an L3 analyst during IR activities. Two suspicious indicators flagged by L1 and escalated for further investigation and threat intelligence gathering.
 
-**Category:** Incident Response / Threat Intelligence
+## Category
+- Incident Response / Threat Intelligence
 
 ## Objective
 - Analyse flagged IP and SHA256 hash
@@ -25,7 +25,7 @@ Searched flagged SHA256 hash (`5d0509f68a9b7c415a726be75a078180e3f02e59866f193b0
 
 Pivoted to the hash of `installer.exe` (execution parent) — Relations tab revealed 4 additional dropped files: `searchhost.exe`, `syshelpers.exe`, `nat.vbs`, `runsys.vbs`.
 
-Searched flagged IP (`101[.]99[.]76[.]120`) and hash (`5d0509f68a9b7c415a726be75a078180e3f02e59866f193b0a99eee8e39c874f`) across platforms:
+Searched flagged IP (`101[.]99[.]76[.]120`) and hash across platforms:
 - VirusTotal — returned results but no malware family
 - ipinfo.io — no malware family
 - Talos Intelligence — no results on hash or IP
@@ -44,17 +44,24 @@ Googled the flagged hash directly — surfaced the original threat report. Repor
 - **Dropped files (installer.exe):** `searchhost.exe`, `syshelpers.exe`, `nat.vbs`, `runsys.vbs`
 - **Flagged IP:** `101[.]99[.]76[.]120`
 - **Malware family:** AsyncRAT C2
-- **Threat report:** `https://research.checkpoint.com/2025/from-trust-to-threat-hijacked-discord-invites-used-for-multi-stage-malware-delivery/`
+- **Threat report:** `hxxps[://]research[.]checkpoint[.]com/2025/from-trust-to-threat-hijacked-discord-invites-used-for-multi-stage-malware-delivery/`
 
 ## Analysis & Response
-- **MITRE ATT&CK:** T1566 (Phishing), T1027 (Obfuscated Files), T1071 (Application Layer Protocol), T1573 (Encrypted Channel), T1539 (Steal Web Session Cookie), T1059.005 (VBScript)
 - Isolate affected endpoint via EDR
 - Block flagged IP `101[.]99[.]76[.]120` at perimeter
 - Revoke and rotate any compromised browser session cookies
 - Notify affected user and escalate to L3 with compiled threat intelligence
 
+## MITRE ATT&CK v19
+- Phishing (T1566) — ClickFix phishing used for initial access via Discord
+- Obfuscated Files or Information (T1027) — obfuscated payloads within dropped files
+- Application Layer Protocol (T1071) — AsyncRAT C2 communication over standard protocols
+- Encrypted Channel (T1573) — encrypted C2 communications
+- Steal Web Session Cookie (T1539) — ChromeKatz used to harvest browser cookies
+- Command and Scripting Interpreter: VBScript (T1059.005) — `nat.vbs` and `runsys.vbs` used for execution chaining
+
 ## Key Takeaways
-- No single CTI platform is sufficient — VT, OTX, Talos, and ipinfo can serve their own purposes during a pivot
+- No single CTI platform is sufficient — VT, OTX, Talos, and ipinfo serve different purposes during a pivot
 - AlienVault OTX surfaces malware family context when VirusTotal doesn't
 - Googling a hash directly can surface threat reports faster than platform-only pivoting
 - VBS dropped files (`nat.vbs`, `runsys.vbs`) signal scripted persistence or execution chaining
