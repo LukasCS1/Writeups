@@ -6,6 +6,6 @@ Documented walkthroughs and notes from my TryHackMe journey.
 
 ## Paths
 - [SOC Level 1](https://tryhackme.com/path/outline/soclevel1)
-- [Defending AWS](https://tryhackme.com/paths)
+- [Defending AWS](https://tryhackme.com/path/outline/defendingaws)
 
 Writeups focus on methodology and analysis. Not on spoilers.
