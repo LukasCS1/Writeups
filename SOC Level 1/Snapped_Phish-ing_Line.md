@@ -16,25 +16,25 @@ Multiple SwiftSpend Financial employees report a suspicious email. Several have 
 - TryHackMe AttackBox
 - VirusTotal
 - CyberChef
-- CLI — `sha256sum`, `unzip`, `find`
+- CLI: `sha256sum`, `unzip`, `find`
 
 ## Investigation Process
-Reviewed 5 emails in phish-emails folder. Extracted recipient name and adversary sender address from headers in *Quote for Services Rendered*. Zoe Duncan's email contained an attachment redirecting to a Microsoft login impersonation page on `kennaroads[.]buzz`.
+Reviewed 5 emails in the phish-emails folder. Extracted recipient name and adversary sender address from headers in *Quote for Services Rendered*. Zoe Duncan's email contained an attachment redirecting to a Microsoft login impersonation page on `kennaroads[.]buzz`.
 
-Navigated to `/data/` on the attacker's server — open directory exposing `update365.zip`. Downloaded and hashed:
+Navigated to `/data/` on the attacker's server. Found an open directory exposing `update365.zip`. Downloaded and hashed:
 ```bash
 sha256sum update365.zip
 ba3c15267393419eb08c7b2652b8b6b39b406ef300ae8a18fee4d16b19ac9686
 ```
 VirusTotal confirmed phishing classification plus an additional threat category, with file count visible on the Details tab.
 
-`/data/Update365/log.txt` contained submitted credentials — manually identified a repeat submission without tooling.
+`/data/Update365/log.txt` contained submitted credentials. Manually identified a repeat submission without tooling.
 
-Located `submit.php` for exfiltration email:
+Located `submit.php` for the exfiltration email:
 ```bash
 find -type f -name submit.php 2>/dev/null
 ```
-Flag found at `/data/Update365/office365/flag.txt` — Base64 encoded, decoded in reverse via CyberChef.
+Flag found at `/data/Update365/office365/flag.txt`. Base64 encoded, decoded in reverse via CyberChef.
 
 ## Findings
 - **Attack chain:** Phishing email → malicious attachment → redirect → credential harvesting page → exfiltration via submit.php
@@ -43,18 +43,18 @@ Flag found at `/data/Update365/office365/flag.txt` — Base64 encoded, decoded i
 - **Credential log:** `/data/Update365/log.txt`
 
 ## Analysis & Response
-- Reset credentials for all affected accounts, prioritize repeat submission identified in log.txt
-- Block `kennaroads[.]buzz` at perimeter
+- Reset credentials for all affected accounts, prioritize the repeat submission identified in log.txt
+- Block `kennaroads[.]buzz` at the perimeter
 - Notify all recipients regardless of submission status
 - Enforce MFA, conduct phishing awareness training
 
-## MITRE ATT&CK v19 
-- Phishing (T1566) — initial access via malicious email attachment
-- Valid Accounts (T1078) — harvested credentials used for account access
-- Obfuscated Files or Information (T1027) — Base64 encoded flag within phishing kit
-- Exfiltration Over Web Service (T1567) — credentials exfiltrated via submit.php to adversary email
+## MITRE ATT&CK
+- Phishing (T1566): initial access via malicious email attachment
+- Valid Accounts (T1078): harvested credentials used for account access
+- Obfuscated Files or Information (T1027): Base64 encoded flag within the phishing kit
+- Exfiltration Over Web Service (T1567): credentials exfiltrated via submit.php to adversary email
 
 ## Key Takeaways
-- Open `/data/` directories are a common attacker OPSEC failure — directory enumeration is an early high-value step
-- Environment isolation determines what interaction with live URLs is safe
-- CyberChef handles encoding/decoding quickly during triage
+- Open `/data/` directories are a common attacker OPSEC failure. Directory enumeration is a high-value early step.
+- Environment isolation determines what interaction with live URLs is safe.
+- CyberChef covers most encoding and decoding needs during triage.
