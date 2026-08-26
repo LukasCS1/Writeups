@@ -1,47 +1,61 @@
-# Room Name
-The Over-Privileged User
+# The Over-Privileged User
 
 ## Room Overview
-A developer, named Carl, joined the team and needed access to AWS. An overzealous admin, with little time to spare, gave him full Administrator rights directly.
-"We'll scope it later", said the admin as he rushed to the next task.
-
-Weeks pass, and the developer still has unrestricted access to every service and resource. What can come later is a security breach.
-
-In this room, you will take on the role of a security analyst who audits user permissions, identifies and remediates misconfigurations, and develops a secure IAM deployment strategy.
+A developer, Carl, joins the team and needs AWS access. An admin under time pressure grants full Administrator rights directly, intending to scope it down later. Weeks pass with no follow-up — the developer retains unrestricted access to every service and resource. Task: audit user permissions, identify and remediate the misconfiguration, and design a secure IAM deployment strategy.
 
 ## Category
-AWS IAM Misconfiguration
-
+- AWS IAM Misconfiguration
 
 ## Incident Summary
-Code Spaces was a company that provided code hosting and project management services built on AWS. It provided subversion and git hosting for development teams.
-On June 17, 2014, Code Spaces was hit by a Distributed Denial-of-Service (DDoS) attack. This was not unusual for an internet-facing service, but the DDoS was only the opening move.
-While the company was focused on mitigating the traffic flood, the attacker had already gained access to the Code Spaces AWS management console, specifically, the EC2 control panel. The attacker left messages inside the console with a Hotmail address, demanding a ransom to stop the attack.
-When Code Spaces staff realized someone was inside their AWS console, they changed the panel passwords. But the attacker had already created multiple backdoor IAM logins. As soon as the attacker saw recovery attempts, they escalated and began deleting everything.
-Within 12 hours, Code Spaces' production environment, backups, machine configurations, and even off-site backups were partially or completely destroyed. The company issued a final notice to customers stating that they could no longer operate and that the company would permanently shut down.
+Code Spaces provided subversion and git hosting for development teams on AWS. On June 17, 2014, the company was hit by a DDoS attack — the opening move, not the main event. While staff focused on mitigating traffic, the attacker had already gained access to the Code Spaces AWS management console via the EC2 control panel, leaving ransom demands inside the console itself.
+
+When staff detected the intrusion and rotated console passwords, the attacker's pre-created backdoor IAM logins gave them a path back in. On detecting recovery attempts, the attacker escalated to destruction — within 12 hours, production environment, backups, machine configurations, and off-site backups were partially or completely deleted. Code Spaces shut down permanently.
 
 ## Core Failure
-The attacker succeeded because the compromised identity had unrestricted administrative access to the entire AWS account. There were no guardrails, no permission boundaries, no explicit deny policies to prevent destructive actions, no MFA requirement for sensitive operations, and no monitoring or alerts for IAM changes.
+The compromised identity held unrestricted administrative access to the entire AWS account. No permission boundaries, no explicit deny policies against destructive actions, no MFA requirement on sensitive operations, no monitoring on IAM changes. A single compromised credential had the same blast radius as full account ownership.
 
-## Identification Process 
-How you identified the misconfiguration — commands run, what they revealed.
-
+## Identification Process
+Listed IAM users, revealing two additional accounts beyond the expected baseline — including `carl-the-dev`:
+```bash
+aws iam list-users
+```
+Checked attached policies for `carl-the-dev`:
+```bash
+aws iam list-attached-user-policies --user-name carl-the-dev
+```
+Found a policy named `AWS201-DevCarlAdmin`. Inspecting the policy document confirmed unrestricted access:
+```json
+"Action": "*",
+"Resource": "*"
+```
+Carl holds full administrative rights over every service and resource in the account, identical in scope to the credential compromised in the Code Spaces incident.
 
 ## Remediation
-Steps taken to fix it — commands, policy changes, config adjustments.
+Detached and removed `AWS201-DevCarlAdmin`, leaving Carl with no permissions. Created a scoped least-privilege policy for developer-level access to the required S3 bucket, EC2 describe actions, and CloudWatch log access:
+
+![AppAccess policy creation](path-to-image/cloudshellpolicycreate.png)
+
+Created a `Developers` group, attached the new policy to the group rather than the individual user, and added Carl to it. Group-based assignment means onboarding is "add to group" and offboarding is "remove from group" — no per-user policy surgery required.
+
+Validated the new policy's effective permissions with AWS Policy Simulator before considering the fix complete:
+
+![Policy simulator validation](path-to-image/awspolicysimulator.png)
 
 ## Secure Build
-How to implement this correctly from scratch — the right way to do it.
+**Group-based permission model** — department-specific groups (Developers, Accounting, etc.) with least-privilege policies attached at the group level:
 
+![AccountingPolicy creation and group attachment](path-to-image/policy.png)
+
+**Permission boundaries** — an IAM policy that sets the maximum permissions an identity can ever hold, regardless of what other policies are attached or later added. Applied as a hard ceiling on Carl's account as an additional safeguard beyond group membership:
+
+![Permission boundary applied to Carl](path-to-image/PermissionBoundary.png)
 
 ## Tools & Environment
-- AWS CLI
-- AWS Console
-
-
-
+- AWS CloudShell
+- AWS Policy Simulator
 
 ## Key Takeaways
-- What the misconfiguration enables for an attacker
-- The correct principle/control that prevents it
-- Any relevant AWS-specific tooling worth noting
+- `"Action": "*", "Resource": "*"` on a standing IAM identity is the same blast radius as the credential that ended Code Spaces — scope by default, not by promise
+- Group-based permission models turn onboarding and offboarding into a single membership change instead of per-user policy edits
+- Permission boundaries cap what an identity can ever do, even if a future policy attachment is overly permissive
+- AWS Policy Simulator validates real-world effective permissions before deployment, catching unintended allows or denies
