@@ -1,11 +1,5 @@
-# TryHackMe Writeups
+# Writeups
 
-Documented walkthroughs and notes from my TryHackMe journey.
+**TryHackMe Profile:** [tryhackme.com/p/Lukas.](https://tryhackme.com/p/Lukas.)
 
-**Profile:** [tryhackme.com/p/Lukas.](https://tryhackme.com/p/Lukas.)
-
-## Paths
-- [SOC Level 1](https://tryhackme.com/path/outline/soclevel1)
-- [Defending AWS](https://tryhackme.com/path/outline/defendingaws)
-
-Writeups focus on methodology and analysis. Not on spoilers.
+Writeups focus on methodology and analysis. Minimal spoilers.
