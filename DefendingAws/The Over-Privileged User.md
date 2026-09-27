@@ -33,22 +33,26 @@ Carl holds full administrative rights over every service and resource in the acc
 ## Remediation
 Detached and removed `AWS201-DevCarlAdmin`, leaving Carl with no permissions. Created a scoped least-privilege policy for developer-level access to the required S3 bucket, EC2 describe actions, and CloudWatch log access:
 
-![AppAccess policy creation](path-to-image/cloudshellpolicycreate.png)
+<img width="632" height="621" alt="cloudshellpolicycreate" src="https://github.com/user-attachments/assets/a18194de-a5f6-42b7-8346-0f41a8bfa085" />
+
 
 Created a `Developers` group, attached the new policy to the group rather than the individual user, and added Carl to it. Group-based assignment turns onboarding into "add to group" and offboarding into "remove from group," with no per-user policy edits required.
 
 Validated the new policy's effective permissions with AWS Policy Simulator before considering the fix complete:
 
-![Policy simulator validation](path-to-image/awspolicysimulator.png)
+<img width="457" height="151" alt="awspolicysimulator" src="https://github.com/user-attachments/assets/d43465c1-3f7d-4ef4-a223-26f684262ed1" />
+
 
 ## Secure Build
 **Group-based permission model.** Department-specific groups (Developers, Accounting, etc.) with least-privilege policies attached at the group level:
 
-![AccountingPolicy creation and group attachment](path-to-image/policy.png)
+<img width="1225" height="665" alt="policy" src="https://github.com/user-attachments/assets/6030f8a1-857a-4e54-9a86-0e74a15e8eec" />
+
 
 **Permission boundaries.** An IAM policy that sets the maximum permissions an identity can ever hold, regardless of what other policies are attached or added later. Applied as a hard ceiling on Carl's account, an additional safeguard beyond group membership:
 
-![Permission boundary applied to Carl](path-to-image/PermissionBoundary.png)
+<img width="1251" height="742" alt="PermissionBoundary" src="https://github.com/user-attachments/assets/e0a8a9b1-77d5-4a5f-9903-a870ce34172a" />
+
 
 ## Tools & Environment
 - AWS CloudShell
