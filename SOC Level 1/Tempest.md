@@ -80,7 +80,7 @@ Searched Sysmon logs for `user/add` activity. Identified two new local accounts 
 - **C2 domain (stage 2):** `resolvecyber.xyz`
 - **Persistence (autostart):** `update.zip` extracted to the Startup folder
 - **LOLBIN abuse:** `certutil.exe` used to download `first.exe`
-- **first.exe SHA256:** `CE278CA242AA2023A4FE04067B0A32FBD3CA1599746C160949868FFC7FC3D7D`
+- **first.exe SHA256:** `CE278CA242AA2023A4FE04067B0A32FBD3CA1599746C160949868FFC7FC3D7D8`
 - **Tunneling tool:** Chisel (`ch.exe`), reverse SOCKS proxy
 - **ch.exe SHA256:** `8A99353662CCAE117D2BB22EFD8C43D7169060450BE413AF763E8AD7522D2451`
 - **Lateral movement:** WinRM (port 5985) authenticated access
