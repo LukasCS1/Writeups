@@ -37,11 +37,13 @@ aws iam list-access-keys \
 ```
 Checked last-used activity for both keys. `KEY1_ID` returned `N/A`, never used. `KEY2_ID` showed recent S3 activity:
 
-![Access key last-used check](path-to-image/lastusedkey.png)
+<img width="395" height="359" alt="lastusedkey" src="https://github.com/user-attachments/assets/86bd15fa-ee3e-4bd1-aeb2-dafc01c2dce8" />
+
 
 Checked inline policies on the user (none) and group membership. `dev-keyleaks` belongs to `AppDataReaders`, which carries `AppDataReadersPolicy`:
 
-![Group policy permissions](path-to-image/grouppolicyperm.png)
+<img width="544" height="640" alt="grouppolicyperm" src="https://github.com/user-attachments/assets/39b82334-bda0-40a4-b982-48958f245939" />
+
 
 Policy scopes access to a specific S3 bucket only. Blast radius from this credential is limited to that bucket, not account-wide.
 
@@ -60,11 +62,13 @@ aws iam delete-access-key \
     --access-key-id $KEY1_ID
 ```
 
-![Key deactivation and deletion](path-to-image/deletekey.png)
+<img width="250" height="174" alt="deletekey" src="https://github.com/user-attachments/assets/1ebd454f-8ae8-4805-a994-6fe1066fb1e1" />
+
 
 Rotated the remaining active key: created a new key for the user, validated it against `sts get-caller-identity` and an S3 list call, then deactivated and deleted the old one:
 
-![New key creation and validation](path-to-image/newkey.png)
+<img width="743" height="416" alt="newkey" src="https://github.com/user-attachments/assets/68e8d441-8242-45cf-8df6-0d799c3d5c4e" />
+
 
 Enabled MFA on the account. End state: stale key removed, active key rotated, MFA enforced.
 
@@ -100,7 +104,8 @@ aws iam create-role \
   --description "Developer role for S3 read access, requires MFA"
 ```
 
-![Role creation with MFA condition and permissions boundary](path-to-image/temporary.png)
+<img width="694" height="840" alt="temporary" src="https://github.com/user-attachments/assets/a5e81402-9025-42e2-974b-a0309f6fe8db" />
+
 
 Attached a scoped inline policy limiting the role to read-only access on the specific bucket:
 ```bash
