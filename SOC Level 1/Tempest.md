@@ -83,7 +83,7 @@ Searched Sysmon logs for `user/add` activity. Identified two new local accounts 
 - **first.exe SHA256:** `CE278CA242AA2023A4FE04067B0A32FBD3CA1599746C160949868FFC7FC3D7D8`
 - **Tunneling tool:** Chisel (`ch.exe`), reverse SOCKS proxy
 - **ch.exe SHA256:** `8A99353662CCAE117D2BB22EFD8C43D7169060450BE413AF763E8AD7522D2451`
-- **Lateral movement:** WinRM (port 5985) authenticated access
+- **Remote access:** WinRM (port 5985) authenticated access
 - **Privilege escalation:** PrintSpoofer (`spf.exe`) exploiting `SeImpersonatePrivilege`
 - **Final C2 channel:** `final.exe` on port 8080
 - **Persistence (accounts):** New local accounts `shion`, `shuna` created
