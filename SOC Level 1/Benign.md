@@ -68,4 +68,3 @@ Navigated to the C2 URL in the isolated VM — `controlc[.]com/e4d11035` — con
 - Rare values in `CommandLine` field surface LOLBINs that don't appear in top results
 - `certutil.exe` is a commonly abused Windows binary for payload download (LOLBIN)
 - Network segmentation context (knowing which users belong to which department) significantly narrows investigation scope
-````
